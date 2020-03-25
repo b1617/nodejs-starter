@@ -1,0 +1,11 @@
+{
+  "name": "nodejs-starter",
+  "version": "1.0.0",
+  "description": "Nodejs starter with javascript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Dhinesh Sattia",
+  "license": "ISC"
+}
