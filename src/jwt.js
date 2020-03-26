@@ -4,7 +4,7 @@ function createToken(user) {
     return jwt.sign({
         sub: user.id,
         iat: new Date().getTime(),
-        exp: new Date().setMinutes(new Date().getMinutes() + 15)
+        exp: new Date().setDate(new Date().getDate() + 1)
     }, 'secretId');
 }
 
