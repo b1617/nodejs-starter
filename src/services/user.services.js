@@ -29,7 +29,6 @@ function createUser(params) {
             } else {
                 const newUser = new User(params);
                 newUser.save().then(res => {
-                    console.log(res);
                     const token = jwt.createToken(newUser);
                     resolve({ user: res, token });
                 }).catch(err => {
