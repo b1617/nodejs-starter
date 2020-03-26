@@ -1,4 +1,5 @@
 const User = require('../models/user.model');
+const jwt = require('../jwt');
 
 function getUser(email) {
     return new Promise((resolve, reject) => {
@@ -28,7 +29,8 @@ function createUser(params) {
             } else {
                 const newUser = new User(params);
                 newUser.save().then(res => {
-                    resolve(res);
+                    const token = jwt.createToken(newUser);
+                    resolve({ user: res, token });
                 });
             }
         });

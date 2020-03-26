@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const userRouter = require('./src/routes/user.routes');
 const app = express();
-const database = require('./config/database');
+const database = require('./src/config/database');
 // config
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
