@@ -10,6 +10,14 @@ function getUser(req, res) {
     });
 }
 
+function getUsers(req, res) {
+    userService.getUsers().then(users => {
+        return res.status(200).json(users);
+    }).catch(err => {
+        return res.status(404).json(err);
+    });
+}
+
 function createUser(req, res) {
     console.log(req.body);
     userService.createUser(req.body).then(user => {
@@ -38,6 +46,7 @@ function deleteUser(req, res) {
 
 module.exports = {
     getUser,
+    getUsers,
     createUser,
     updateUser,
     deleteUser

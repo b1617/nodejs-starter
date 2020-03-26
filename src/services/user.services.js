@@ -10,6 +10,16 @@ function getUser(email) {
     });
 }
 
+function getUsers() {
+    return new Promise((resolve, reject) => {
+        User.find({}).then(users => {
+            resolve(users);
+        }).catch(err => {
+            reject(err);
+        });
+    });
+}
+
 function createUser(params) {
     return new Promise((resolve, reject) => {
         getUser(params.email).then(user => {
@@ -56,6 +66,7 @@ function updateUser(params) {
 
 module.exports = {
     getUser,
+    getUsers,
     createUser,
     deleteUser,
     updateUser,
