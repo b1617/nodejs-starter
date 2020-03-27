@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "nodemon app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "author": "Dhinesh Sattia",
   "license": "ISC",
@@ -20,6 +20,7 @@
     "passport-local": "^1.0.0"
   },
   "devDependencies": {
+    "jest": "^25.2.3",
     "nodemon": "^2.0.2"
   }
 }

@@ -71,6 +71,7 @@ function updateUser(params) {
 
 module.exports = {
     getUsers,
+    getUser,
     createUser,
     deleteUser,
     updateUser,
