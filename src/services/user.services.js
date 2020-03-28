@@ -1,18 +1,30 @@
 const User = require('../models/user.model');
 const jwt = require('../jwt');
+const redis = require('../config/database/redis');
 
 function getUser(email) {
     return new Promise((resolve, reject) => {
-        User.findOne({ email }).then(user => {
-            resolve(user);
+        redis.getCache(email).then((result) => {
+            console.log(result);
+            if (result !== null) {
+                resolve(JSON.parse(result));
+            } else {
+                User.findOne({ email }).then(user => {
+                    redis.setCache(email, JSON.stringify(user));
+                    resolve(user);
+                }).catch(err => {
+                    reject(err);
+                });
+            }
         }).catch(err => {
             reject(err);
-        });
+        })
     });
 }
 
 function getUsers() {
     return new Promise((resolve, reject) => {
+        console.log('get users');
         User.find({}).then(users => {
             resolve(users);
         }).catch(err => {
@@ -30,6 +42,7 @@ function createUser(params) {
                 const newUser = new User(params);
                 newUser.save().then(res => {
                     const token = jwt.createToken(newUser);
+                    redis.setCache(params.email, JSON.stringify(newUser));
                     resolve({ user: res, token });
                 }).catch(err => {
                     console.log(err);

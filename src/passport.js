@@ -9,8 +9,8 @@ passport.use(new JwtStrategy({
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     secretOrKey: 'secretId'
 }, (payload, done) => {
-    console.log('payload', payload);
     User.findById(payload.sub).then((user) => {
+        console.log(user);
         if (!user) {
             return done(null, null);
         }
