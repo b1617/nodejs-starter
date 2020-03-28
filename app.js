@@ -1,4 +1,5 @@
-require('./src/config/database');
+require('./src/config/database/mongodb');
+require('./src/config/database/redis');
 const express = require('express');
 const bodyParser = require('body-parser');
 const userRouter = require('./src/routes/user.routes');

@@ -1,5 +1,12 @@
 const User = require('../models/user.model');
 const jwt = require('../jwt');
+const redisClient = require('../config/database/redis')
+
+async function cache(key) {
+    const values = await redisClient.lrange(key, 0, -1);
+    console.log(values);
+    return values;
+}
 
 function getUser(email) {
     return new Promise((resolve, reject) => {
@@ -13,11 +20,22 @@ function getUser(email) {
 
 function getUsers() {
     return new Promise((resolve, reject) => {
-        User.find({}).then(users => {
-            resolve(users);
-        }).catch(err => {
-            reject(err);
-        });
+        console.log('get users');
+        const cacheUsers = cache('users');
+        console.log(cacheUsers);
+        if (cacheUsers) {
+            console.log('cache usrs');
+            resolve(cacheUsers);
+        } else {
+            console.log('find');
+            User.find({}).then(users => {
+                console.log(users);
+                redisClient.rpush('users', users);
+                resolve(users);
+            }).catch(err => {
+                reject(err);
+            });
+        }
     });
 }
 
