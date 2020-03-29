@@ -7,7 +7,7 @@ const bcrypt = require('bcryptjs');
 
 passport.use(new JwtStrategy({
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-    secretOrKey: 'secretId'
+    secretOrKey: process.env.JWT_KEY
 }, (payload, done) => {
     User.findById(payload.sub).then((user) => {
         console.log(user);
