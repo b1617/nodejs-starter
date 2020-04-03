@@ -69,7 +69,12 @@ function deleteUser(params) {
     getUser(email).then(userFounded => {
       if (userFounded) {
         User.deleteOne({ email }).then(res => {
-          resolve(res);
+          redis.getCache(email).then(item => {
+            if (item !== null) {
+              redis.removeItem(email);
+            }
+            resolve(res);
+          });
         });
       } else {
         reject('user not exist');
