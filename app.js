@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const userRouter = require('./src/routes/user.routes');
 const cors = require('cors');
 mongoose.start();
+// redis.start();
 const app = express();
 app.use(cors());
 const PORT = process.env.PORT || 5000;

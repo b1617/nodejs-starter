@@ -37,7 +37,6 @@ function createUser(params) {
           .save()
           .then((res) => {
             const token = jwt.createToken(newUser);
-            redis.setCache(params.email, JSON.stringify(newUser));
             resolve({ user: res, token });
           })
           .catch((err) => {
