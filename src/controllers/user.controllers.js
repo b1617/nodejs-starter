@@ -6,6 +6,8 @@ function signIn(req, res) {
   res.status(200).json({ user: req.user, token });
 }
 
+
+
 function getUsers(req, res) {
   userService
     .getUsers()

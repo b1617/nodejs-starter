@@ -1,27 +1,13 @@
 const User = require('../models/user.model');
 const jwt = require('../jwt');
-const redis = require('../config/database/redis');
 
 function getUser(email) {
   return new Promise((resolve, reject) => {
-    redis
-      .getCache(email)
-      .then(result => {
-        console.log(result);
-        if (result !== null) {
-          resolve(JSON.parse(result));
-        } else {
-          User.findOne({ email })
-            .then(user => {
-              redis.setCache(email, JSON.stringify(user));
-              resolve(user);
-            })
-            .catch(err => {
-              reject(err);
-            });
-        }
+    User.findOne({ email })
+      .then((user) => {
+        resolve(user);
       })
-      .catch(err => {
+      .catch((err) => {
         reject(err);
       });
   });
@@ -31,10 +17,10 @@ function getUsers() {
   return new Promise((resolve, reject) => {
     console.log('get users');
     User.find({})
-      .then(users => {
+      .then((users) => {
         resolve(users);
       })
-      .catch(err => {
+      .catch((err) => {
         reject(err);
       });
   });
@@ -42,19 +28,19 @@ function getUsers() {
 
 function createUser(params) {
   return new Promise((resolve, reject) => {
-    getUser(params.email).then(user => {
+    getUser(params.email).then((user) => {
       if (user) {
         reject('user already exist');
       } else {
         const newUser = new User(params);
         newUser
           .save()
-          .then(res => {
+          .then((res) => {
             const token = jwt.createToken(newUser);
             redis.setCache(params.email, JSON.stringify(newUser));
             resolve({ user: res, token });
           })
-          .catch(err => {
+          .catch((err) => {
             console.log(err);
             reject(err);
           });
@@ -66,15 +52,10 @@ function createUser(params) {
 function deleteUser(params) {
   return new Promise((resolve, reject) => {
     const email = params.email;
-    getUser(email).then(userFounded => {
+    getUser(email).then((userFounded) => {
       if (userFounded) {
-        User.deleteOne({ email }).then(res => {
-          redis.getCache(email).then(item => {
-            if (item !== null) {
-              redis.removeItem(email);
-            }
-            resolve(res);
-          });
+        User.deleteOne({ email }).then((res) => {
+          resolve(res);
         });
       } else {
         reject('user not exist');
@@ -87,11 +68,11 @@ function updateUser(params) {
   return new Promise((resolve, reject) => {
     deleteUser(params)
       .then(() => {
-        createUser(params).then(newUser => {
+        createUser(params).then((newUser) => {
           resolve(newUser);
         });
       })
-      .catch(err => {
+      .catch((err) => {
         reject(err);
       });
   });
